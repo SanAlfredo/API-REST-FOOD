@@ -1,5 +1,6 @@
 import express from "express";
 import indexRoutes from "./routes/index.routes.js";
+import personRoutes from "./routes/person.routes.js";
 // import cursoRoutes from "./routes/curso.routes.js";
 // import usuarioRoutes from "./routes/usuario.routes.js";
 // import sesionRoutes from "./routes/sesion.routes.js";
@@ -10,7 +11,7 @@ app.use(express.json());
 
 //rutas
 app.use(indexRoutes);
-//app.use(cursoRoutes);
+app.use(personRoutes);
 // app.use(usuarioRoutes);
 // app.use(sesionRoutes);
 
