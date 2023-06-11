@@ -3,10 +3,10 @@ import { DataTypes } from "sequelize";
 
 const User = conn.define("users", {
   id: {
-    type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false,
+    type: DataTypes.INTEGER,
+    unsigned: true,
+    primaryKey: true,
+    autoIncrement: true,
   },
   user: {
     type: DataTypes.STRING(50),
@@ -14,7 +14,6 @@ const User = conn.define("users", {
   password: {
     type: DataTypes.STRING,
   },
-  
 });
 
 export default User;
