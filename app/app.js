@@ -8,9 +8,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import saleRoutes from "./routes/sale.routes.js";
 import orderRoutes from "./routes/order.routes.js";
-// import cursoRoutes from "./routes/curso.routes.js";
-
-// import sesionRoutes from "./routes/sesion.routes.js";
+import sesionRoutes from "./routes/sesion.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -26,6 +24,6 @@ app.use(categoryRoutes);
 app.use(productRoutes);
 app.use(saleRoutes);
 app.use(orderRoutes);
-// app.use(sesionRoutes);
+app.use(sesionRoutes);
 
 export default app;
