@@ -1,41 +1,40 @@
-import Person from "../models/person.model.js";
+import Sale from "../models/sale.model.js";
 import User from "../models/user.model.js";
-import bcrypt from "bcryptjs";
 
-//metodo para crear un usuario
+//metodo para crear una venta
 export const create = (req, res) => {
-  console.log("create User", req.body);
+  console.log("create a Sale", req.body);
   const {
-    body: { usuario, contrasenia, persona },
+    body: { fecha, pagado, usuario },
   } = req;
+  if (!fecha) {
+    res.status(400).send({
+      message: "El campo fecha es obligatorio",
+    });
+    return;
+  }
+  if (!pagado) {
+    res.status(400).send({
+      message: "El campo pagado es obligatorio",
+    });
+    return;
+  }
   if (!usuario) {
     res.status(400).send({
       message: "El campo usuario es obligatorio",
     });
     return;
   }
-  if (!contrasenia) {
-    res.status(400).send({
-      message: "El campo contrasenia es obligatorio",
-    });
-    return;
-  }
-  if (!persona) {
-    res.status(400).send({
-      message: "El campo persona es obligatorio",
-    });
-    return;
-  }
-  const userInsert = {
-    user: usuario,
-    password: bcrypt.hashSync(contrasenia, 8),
-    personId: persona,
+  const venta = {
+    date: fecha,
+    paid: pagado,
+    userId: usuario,
   };
 
-  Person.findByPk(persona)
+  User.findByPk(usuario)
     .then((data) =>
       data
-        ? User.create(userInsert)
+        ? Sale.create(venta)
             .then((data) => {
               res.send(data);
             })
@@ -44,7 +43,7 @@ export const create = (req, res) => {
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe esa persona" })
+        : res.send({ message: "no existe ese usuario" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -52,10 +51,10 @@ export const create = (req, res) => {
       });
     });
 };
-//devuelve la lista de usuarios
+//devuelve la lista de ventas
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  User.findAll()
+  Sale.findAll()
     .then((data) =>
       data
         ? res.send(data)
@@ -69,10 +68,10 @@ export const list = (req, res) => {
       });
     });
 };
-//devuelve un solo usuario
+//devuelve una sola venta
 export const detail = (req, res) => {
-  console.log("detalle de Usuario ", req.params);
-  User.findByPk(req.params.id)
+  console.log("detalle de Venta", req.params);
+  Sale.findByPk(req.params.id)
     .then((data) =>
       data ? res.send(data) : res.send({ message: "no hay datos" })
     )
@@ -82,57 +81,57 @@ export const detail = (req, res) => {
       });
     });
 };
-//actualizar datos usuario
+//actualizar datos venta
 export const update = (req, res) => {
-  console.log("actualizar usuario ", req.params, req.body);
+  console.log("actualizar venta", req.params, req.body);
   const {
-    body: { usuario, contrasenia, persona },
+    body: { fecha, pagado, usuario },
   } = req;
+  if (!fecha) {
+    res.status(400).send({
+      message: "El campo fecha es obligatorio",
+    });
+    return;
+  }
+  if (!pagado) {
+    res.status(400).send({
+      message: "El campo pagado es obligatorio",
+    });
+    return;
+  }
   if (!usuario) {
     res.status(400).send({
       message: "El campo usuario es obligatorio",
     });
     return;
   }
-  if (!contrasenia) {
-    res.status(400).send({
-      message: "El campo contrasenia es obligatorio",
-    });
-    return;
-  }
-  if (!persona) {
-    res.status(400).send({
-      message: "El campo persona es obligatorio",
-    });
-    return;
-  }
-  const userInsert = {
-    user: usuario,
-    password: bcrypt.hashSync(contrasenia, 8),
-    personId: persona,
+  const venta = {
+    date: fecha,
+    paid: pagado,
+    userId: usuario,
   };
 
-  Person.findByPk(persona)
+  User.findByPk(usuario)
     .then((data) =>
       data
-        ? User.findByPk(req.params.id)
+        ? Sale.findByPk(req.params.id)
             .then((data) =>
               data
-                ? User.update(userInsert, { where: { id: req.params.id } })
+                ? Sale.update(venta, { where: { id: req.params.id } })
                     .then(res.send("actualizado con exito"))
                     .catch((error) => {
                       res.status(500).send({
                         message: error.message,
                       });
                     })
-                : res.send({ message: "no existe ese usuario " })
+                : res.send({ message: "no existe esa venta" })
             )
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe esa persona" })
+        : res.send({ message: "no existe ese usuario" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -141,20 +140,20 @@ export const update = (req, res) => {
     });
 };
 
-//borrar un usuario
+//borrar una venta
 export const borrar = (req, res) => {
-  console.log("borrando usuario", req.params);
-  User.findByPk(req.params.id)
+  console.log("borrando venta", req.params);
+  Sale.findByPk(req.params.id)
     .then((data) =>
       data
-        ? User.destroy({ where: { id: req.params.id } })
+        ? Sale.destroy({ where: { id: req.params.id } })
             .then(res.send("eliminado con exito"))
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe ese usuario" })
+        : res.send({ message: "no existe esa venta" })
     )
     .catch((error) => {
       res.status(500).send({

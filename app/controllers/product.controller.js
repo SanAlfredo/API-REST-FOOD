@@ -1,41 +1,47 @@
-import Person from "../models/person.model.js";
-import User from "../models/user.model.js";
-import bcrypt from "bcryptjs";
+import Category from "../models/category.model.js";
+import Product from "../models/product.model.js";
 
-//metodo para crear un usuario
+//metodo para crear un producto
 export const create = (req, res) => {
-  console.log("create User", req.body);
+  console.log("create Product", req.body);
   const {
-    body: { usuario, contrasenia, persona },
+    body: { nombre, descripcion, precio, categoria },
   } = req;
-  if (!usuario) {
+  if (!nombre) {
     res.status(400).send({
-      message: "El campo usuario es obligatorio",
+      message: "El campo nombre es obligatorio",
     });
     return;
   }
-  if (!contrasenia) {
+  if (!descripcion) {
     res.status(400).send({
-      message: "El campo contrasenia es obligatorio",
+      message: "El campo descripcion es obligatorio",
     });
     return;
   }
-  if (!persona) {
+  if (!precio) {
     res.status(400).send({
-      message: "El campo persona es obligatorio",
+      message: "El campo precio es obligatorio",
     });
     return;
   }
-  const userInsert = {
-    user: usuario,
-    password: bcrypt.hashSync(contrasenia, 8),
-    personId: persona,
+  if (!categoria) {
+    res.status(400).send({
+      message: "El campo categoria es obligatorio",
+    });
+    return;
+  }
+  const producto = {
+    name: nombre,
+    description: descripcion,
+    price: precio,
+    categoryId: categoria,
   };
 
-  Person.findByPk(persona)
+  Category.findByPk(categoria)
     .then((data) =>
       data
-        ? User.create(userInsert)
+        ? Product.create(producto)
             .then((data) => {
               res.send(data);
             })
@@ -44,7 +50,7 @@ export const create = (req, res) => {
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe esa persona" })
+        : res.send({ message: "no existe esa categoria" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -52,10 +58,10 @@ export const create = (req, res) => {
       });
     });
 };
-//devuelve la lista de usuarios
+//devuelve la lista de productos
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  User.findAll()
+  Product.findAll()
     .then((data) =>
       data
         ? res.send(data)
@@ -69,10 +75,10 @@ export const list = (req, res) => {
       });
     });
 };
-//devuelve un solo usuario
+//devuelve un solo producto
 export const detail = (req, res) => {
-  console.log("detalle de Usuario ", req.params);
-  User.findByPk(req.params.id)
+  console.log("detalle de Producto ", req.params);
+  Product.findByPk(req.params.id)
     .then((data) =>
       data ? res.send(data) : res.send({ message: "no hay datos" })
     )
@@ -82,57 +88,64 @@ export const detail = (req, res) => {
       });
     });
 };
-//actualizar datos usuario
+//actualizar datos producto
 export const update = (req, res) => {
-  console.log("actualizar usuario ", req.params, req.body);
+  console.log("actualizar producto ", req.params, req.body);
   const {
-    body: { usuario, contrasenia, persona },
+    body: { nombre, descripcion, precio, categoria },
   } = req;
-  if (!usuario) {
+  if (!nombre) {
     res.status(400).send({
-      message: "El campo usuario es obligatorio",
+      message: "El campo nombre es obligatorio",
     });
     return;
   }
-  if (!contrasenia) {
+  if (!descripcion) {
     res.status(400).send({
-      message: "El campo contrasenia es obligatorio",
+      message: "El campo descripcion es obligatorio",
     });
     return;
   }
-  if (!persona) {
+  if (!precio) {
     res.status(400).send({
-      message: "El campo persona es obligatorio",
+      message: "El campo precio es obligatorio",
     });
     return;
   }
-  const userInsert = {
-    user: usuario,
-    password: bcrypt.hashSync(contrasenia, 8),
-    personId: persona,
+  if (!categoria) {
+    res.status(400).send({
+      message: "El campo categoria es obligatorio",
+    });
+    return;
+  }
+  const producto = {
+    name: nombre,
+    description: descripcion,
+    price: precio,
+    categoryId: categoria,
   };
 
-  Person.findByPk(persona)
+  Category.findByPk(categoria)
     .then((data) =>
       data
-        ? User.findByPk(req.params.id)
+        ? Product.findByPk(req.params.id)
             .then((data) =>
               data
-                ? User.update(userInsert, { where: { id: req.params.id } })
+                ? Product.update(producto, { where: { id: req.params.id } })
                     .then(res.send("actualizado con exito"))
                     .catch((error) => {
                       res.status(500).send({
                         message: error.message,
                       });
                     })
-                : res.send({ message: "no existe ese usuario " })
+                : res.send({ message: "no existe ese producto" })
             )
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe esa persona" })
+        : res.send({ message: "no existe esa categoria" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -141,20 +154,20 @@ export const update = (req, res) => {
     });
 };
 
-//borrar un usuario
+//borrar un producto
 export const borrar = (req, res) => {
-  console.log("borrando usuario", req.params);
-  User.findByPk(req.params.id)
+  console.log("borrando producto", req.params);
+  Product.findByPk(req.params.id)
     .then((data) =>
       data
-        ? User.destroy({ where: { id: req.params.id } })
+        ? Product.destroy({ where: { id: req.params.id } })
             .then(res.send("eliminado con exito"))
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe ese usuario" })
+        : res.send({ message: "no existe ese producto" })
     )
     .catch((error) => {
       res.status(500).send({

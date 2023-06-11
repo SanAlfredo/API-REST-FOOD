@@ -6,4 +6,3 @@ pids
 *.pid
 .env
 package-lock.json
-config/
